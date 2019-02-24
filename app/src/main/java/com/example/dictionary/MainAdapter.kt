@@ -21,33 +21,35 @@ class MainAdapter(val results: Results): RecyclerView.Adapter<CustomViewHolder>(
     }
 
     override fun onBindViewHolder(holder: CustomViewHolder, position: Int) {
-        val data = results.data.get(position)
-        holder.view.textView_kanji.text = data.slug
+		val data = results.data.get(position)
+		holder.view.textView_kanji.text = data.slug
+
+		holder.view.textView_english_translation.text = ""
+
+//		for (english in data.senses){
+//			println(english.english_definitions.size)
+//			val count = english.english_definitions.size
+//
+//			for (i in english.english_definitions) {
+//				holder.view.textView_english_translation.append("$i, ")
+//			}
+//		}
 
 		for (english in data.senses){
 			println(english.english_definitions.size)
 			val count = english.english_definitions.size
+		var j = 0
 
-			for (i in english.english_definitions) {
-				holder.view.textView_english_translation.append("$i, ")
+			for (i in english.english_definitions)
+			{
+				if(j < count - 1)
+				{
+					holder.view.textView_english_translation.append("$i, ")
+					j += 1
+				}
+				else
+				holder.view.textView_english_translation.append(i + "\n")
 			}
-
-//			for (english in data.senses){
-//				println(english.english_definitions.size)
-//				val count = english.english_definitions.size
-//			var j = 0
-//
-//				for (i in english.english_definitions)
-//				{
-//					if(j < count - 1)
-//					{
-//						holder.view.textView_english_translation.append("$i, ")
-//						j += 1
-//					}
-//					else
-//					holder.view.textView_english_translation.append(i + "\n")
-//				}
-//			}
 		}
     }
 }
