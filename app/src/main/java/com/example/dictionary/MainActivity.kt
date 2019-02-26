@@ -1,9 +1,9 @@
 package com.example.dictionary
 
-import android.graphics.Color
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.widget.SearchView
 import com.google.gson.GsonBuilder
 import kotlinx.android.synthetic.main.activity_main.*
 import okhttp3.*
@@ -18,27 +18,44 @@ class MainActivity : AppCompatActivity() {
         recyclerView_main.layoutManager = LinearLayoutManager(this)
 //        recyclerView_main.adapter = MainAdapter()
 
-        fetchJson()
+        searchView_main.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                if (query != null) {
+                    fetchJson(query)
+                }
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                return true
+            }
+        })
     }
 
-    fun fetchJson(){
-        val url = "https://jisho.org/api/v1/search/words?keyword=house"
+
+    fun fetchJson(keyword: String) {
+
+        println(keyword)
+        println(keyword)
+        println(keyword)
+
+        val url = "https://jisho.org/api/v1/search/words?keyword=$keyword"
 
         val request = Request.Builder().url(url).build()
 
         val client = OkHttpClient()
-        client.newCall(request).enqueue(object: Callback {
+        client.newCall(request).enqueue(object : Callback {
             override fun onResponse(call: Call, response: Response) {
                 val body = response.body()?.string()
                 println(body)
 
-				val gson = GsonBuilder().create()
+                val gson = GsonBuilder().create()
 
-				val results = gson.fromJson(body, Results::class.java)
+                val results = gson.fromJson(body, Results::class.java)
 
-				runOnUiThread {
-					recyclerView_main.adapter = MainAdapter(results)
-				}
+                runOnUiThread {
+                    recyclerView_main.adapter = MainAdapter(results)
+                }
             }
 
             override fun onFailure(call: Call, e: IOException) {
