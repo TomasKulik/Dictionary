@@ -22,14 +22,25 @@ class MainAdapter(val results: Results): RecyclerView.Adapter<CustomViewHolder>(
 
     override fun onBindViewHolder(holder: CustomViewHolder, position: Int) {
 		val data = results.data[position]
-		holder.view.textView_kanji.text = data.slug
+
+		if(!data.japanese[0].word.isNullOrEmpty())
+		{
+			holder.view.textView_kanji.text = data.japanese[0].word
+		}
+		else
+		{
+			holder.view.textView_kanji.text = data.slug
+		}
+
+        holder.view.textView_reading.text = data.japanese[0].reading
+
 
 		holder.view.textView_english_translation.text = ""
 
 		for (english in data.senses){
 			println(english.english_definitions.size)
 			val count = english.english_definitions.size
-		var j = 0
+			var j = 0
 
 			for (i in english.english_definitions)
 			{
@@ -42,7 +53,14 @@ class MainAdapter(val results: Results): RecyclerView.Adapter<CustomViewHolder>(
 				holder.view.textView_english_translation.append(i + "\n")
 			}
 		}
-    }
+
+		holder.view.textView_common.alpha = 1f
+
+		if (!data.is_common)
+		{
+			holder.view.textView_common.alpha = 0f
+		}
+	}
 }
 
 class CustomViewHolder(val view: View): RecyclerView.ViewHolder(view) {

@@ -67,7 +67,7 @@ class MainActivity : AppCompatActivity() {
 
 class Results(val data: List<Data>)
 
-class Data(val slug: String, val is_common: String, val japanese: List<Japanese>, val senses: List<Senses>)
+class Data(val slug: String, val is_common: Boolean, val japanese: List<Japanese>, val senses: List<Senses>)
 
 class Japanese(val word: String, val reading: String)
 
